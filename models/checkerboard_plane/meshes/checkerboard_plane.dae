@@ -12,7 +12,8 @@
   </asset>
   <library_images>
     <image id="checker_png" name="checker_png">
-      <init_from>checker.png</init_from>
+      <!--<init_from>checker.png</init_from>-->
+      <init_from>checker4x5.png</init_from>
     </image>
   </library_images>
   <library_effects>

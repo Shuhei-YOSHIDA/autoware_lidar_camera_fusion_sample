@@ -6,12 +6,13 @@
   <arg name="headless" default="false"/>
   <arg name="debug" default="false"/>
   <arg name="verbose" default="false"/>
-  <arg name="world_name" default="$(find velodyne_description)/world/example.world"/>
+  <arg name="world_name" default="$(find autoware_lidar_camera_fusion_sample)/example.world"/>
 
   <env name="GAZEBO_MODEL_PATH" value="${GAZEBO_MODEL_PATH}:$(find autoware_lidar_camera_fusion_sample)/models"/>
   <env name="GAZEBO_RESOURCE_PATH" value="${GAZEBO_RESOURCE_PATH}:$(find autoware_lidar_camera_fusion_sample)/models"/>
 
   <!-- Start gazebo and load the world -->
+  <param name="/use_sim_time" type="bool" value="true"/>
   <include file="$(find gazebo_ros)/launch/empty_world.launch" >
     <arg name="paused" value="$(arg paused)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
@@ -38,6 +39,8 @@
     args="-urdf -param /robot_description2 -model rgbcamera"/>
   <node pkg="gazebo_ros" type="spawn_model" name="spawn_board_model"
     args="-sdf -database checkerboard_plane -model checkerboard_plane -x 4 -z 1 -P -1.5707963 "/>
+  <!--<node pkg="gazebo_ros" type="spawn_model" name="spawn_board_model"-->
+    <!--args="-sdf -database calibration_plane -model calibration_plane -x 4 -z 1 -P -1.5707963 "/>-->
 
   <!-- RViz -->
   <arg name="rviz" default="true"/>
