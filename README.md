@@ -41,8 +41,8 @@ To execute intrinsic calibration of RGB-camera, after executing `sensors.launch`
 $ rosrun autoware_camera_lidar_calibrator cameracalibrator.py --square 0.25 --size 5x4 image:=/rgb_camera/image_raw
 ```
 
-"0.25" is size of a edge of a square on the checkerboard.
-"5x4" is the number of checker crossing.
+"0.25" is the size of a edge of a square on the checkerboard, whose unit is meter.
+"5x4" represents the number of checker crossing.
 For actual calibration in real envionment, set appropriate values.
 
 Then you rotate and move the checkerboard in gazebo simulation.
@@ -120,9 +120,28 @@ You should check the result is consistent and may fix it.
 <img src=doc/extrinsiccalib.png width=50%>
 
 # Calibration_publisher and Pixel-Cloud fusion
+To utilize the result of intrinsic and extrinsic calibration, use "calibration_publisher" package.
+
 ```
 $ rosrun calibration_publisher calibration_publisher _calibrarion_file:=EXTRINSIC_FILE_PATH _camera_frame:=rgb_camera_link _target_frame:=velodyne2 image_topic_src:=/rgb_camera/image_raw _camera_info_topic:=/rgb_camera/camera_info
 ```
+
+You can check connection of TF between camera_frame and target_frame in RViz.
+
+In order to superpose RGB pixel color on points from LiDAR, you can use "pixel_cloud_fusion" package.
+The "pixel_cloud_fusion" packages requires recrified image, hence "image_processor" package of Autoware is also executed as following.
+
+```
+$ rosrun image_processor image_rectifier _image_src:=/rgb_camera/image_raw _camera_info_src:=/rgb_camera/camera_info /image_rectified:=/rgb_camera/image_rectified
+```
+
+```
+$ roslaunch pixel_cloud_fusion pixel_cloud_fusion.launch points_src:=/velodyne_points2 image_src:=/rgb_camera/image_rectified camera_info_src:=/rgb_camera/camera_info
+```
+
+Below image shows the superposing of pixel on point cloud.
+The results represents that the external calibration generates slightly different transformation.
+You may fix the transformation between camera and LiDAR with checking the superpositing.
 
 <img src=doc/gazebo.png width=50%>
 <img src=doc/rviz.png width=50%>
@@ -130,3 +149,5 @@ $ rosrun calibration_publisher calibration_publisher _calibrarion_file:=EXTRINSI
 # Reference
 * [Autoware Camera-LiDAR Calibration Package(Autoware AI documentation)](https://autoware.readthedocs.io/en/feature-documentation_rtd/DevelopersGuide/PackagesAPI/sensing/autoware_camera_lidar_calibrator.html)
 * [LiDAR-Camera Fusion(Autoware AI documentation)](https://autoware.readthedocs.io/en/feature-documentation_rtd/DevelopersGuide/PackagesAPI/detection/pixel_cloud_fusion.html)
+* [Autoware Repository (autoware_camera_lidar_calibrator package)](https://github.com/Autoware-AI/utilities/tree/master/autoware_camera_lidar_calibrator)
+* [Autoware Repository (calibration_publisher package)](https://github.com/Autoware-AI/utilities/tree/master/calibration_publisher)
