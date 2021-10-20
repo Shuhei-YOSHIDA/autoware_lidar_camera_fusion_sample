@@ -96,6 +96,13 @@ from "image_view2" and "clicked_point" topic from RViz(Publish Point).
 The node compares points on image and on point clouds, then calculates extrinsic calibration.
 
 Click a point on the checker board on "image_view2" and the same point of point cloud on RViz by using "Publish Point".
+**In RViz, you need to set Global options/Fixed frame to lidar frame_id; "velodyne2".**
+And, Lidar axis should be as follows.
+- **X axis points to the front of lidar**
+- **Y axis points to the left**
+- **Z axis points upwards**
+
+
 You can read on terminal the output from "autoware_camera_lidar_calibration_node" for example...
 ```
 ......
