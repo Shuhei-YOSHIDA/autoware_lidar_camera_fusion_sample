@@ -35,8 +35,15 @@ However, the metadata should be obtained via intrinsic calibration and published
 You use `/rgb_camera/camera_info_nominal` as criteria for results of internal calibration.
 
 # Intrinsic calibration of RGB camera
-After executing `sensors.launch`, 
-`$ rosrun autoware_camera_lidar_calibrator cameracalibrator.py --square 0.25 --size 5x4 image:=/rgb_camera/image_raw`.
+To execute intrinsic calibration of RGB-camera, after executing `sensors.launch`, use next command.
+
+```
+$ rosrun autoware_camera_lidar_calibrator cameracalibrator.py --square 0.25 --size 5x4 image:=/rgb_camera/image_raw
+```
+
+"0.25" is size of a edge of a square on the checkerboard.
+"5x4" is the number of checker crossing.
+For actual calibration in real envionment, set appropriate values.
 
 Then you rotate and move the checkerboard in gazebo simulation.
 As default, 40 valid images are necessary to execute intrinsic calibration.
@@ -49,18 +56,53 @@ Results is saved by pushing a button of "SAVE".
 Try to compare the results and '/rgb_camera/camera_info_nominal'.
 
 The saved file is yaml and possible to load by `calibration_publisher` package
-whose node publishes 'camera_info' topic.
+whose node publishes `camera_info` topic.
 
 <img src=doc/intrinsiccalib.png width=50%>
 
 # Extrinsic calibration between an RGB camera and a LiDAR
-
+To execute extrinsic calibration, use next command.
 ```
 $ roslaunch autoware_camera_lidar_calibrator camera_lidar_calibration.launch \
 intrinsics_file:=INTRINSIC_FILE_PATH camera_id:=/rgb_camera \
 target_frame:=velodyne2 camera_frame:=rgb_camera_link
 ```
 
+In these option, "INTRINCSIC_FILE_PATH" is file path of the result of intrinsic calibration.
+"camera_id" is namespace of camera-related topics.
+For example, "/rgb_camera/image_raw", "/rgb_camera/camera_info", "/rgb_camera/image_rectified" and so on are 
+used as topics' names.
+"target_frame" is frame_id of point clouds from LiDAR.
+And "rgb_camera_link" is frame_id of image from RGB-camera.
+Please check argument of the launch file.
+
+
+The launch file executes below nodes with namespace.
+
+* /rgb_camera/calibration_publisher
+* /rgb_camera/rectifier
+* /rgb_camera/image_view2
+* /rgb_camera/autoware_camera_lidar_calibration_node
+
+"calibration_publisher" node publishes "camera_info" topic by loading an intrinsic calibration file.
+"rectifier" node subscribes "image_raw" and "camera_info" topics and publishes "image_rectified" topic.
+The "calibration_publisher" node can broadcast TF between LiDAR and RGB-camera, however it is disabled here.
+
+And "image_view2" shows "image_rectified" and make user click on the image.
+The clicked point is published as "image_rectified/screenpoint" topic.
+
+"autoware_camera_lidar_calibration_node" node subscribes "image_recrified/screenpoint" topic
+from "image_view2" and "clicked_point" topic from RViz(Publish Point).
+The node compares points on image and on point clouds, then calculates extrinsic calibration.
+
+
+
+
+
+
+
+
+<img src=doc/extrinsiccalib.png width=50%>
 
 # Calibration_publisher and Pixel-Cloud fusion
 ```
