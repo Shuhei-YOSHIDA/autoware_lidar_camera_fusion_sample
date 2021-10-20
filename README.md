@@ -27,7 +27,7 @@ Some topics are published from gazebo simulatior and next topics are used in exp
 
 * /rgb_camera/image_raw
 * /rgb_camera/camera_info_nominal
-* /velodyne_points2.
+* /velodyne_points2 (from HDL-32).
 
 `/rgb_camera/image_raw` is raw image from orange RGB-camera.
 And `/rgb_camera/camera_info_nominal` includes metadata of images from RGB-camera.
@@ -95,12 +95,27 @@ The clicked point is published as "image_rectified/screenpoint" topic.
 from "image_view2" and "clicked_point" topic from RViz(Publish Point).
 The node compares points on image and on point clouds, then calculates extrinsic calibration.
 
+Click a point on the checker board on "image_view2" and the same point of point cloud on RViz by using "Publish Point".
+You can read on terminal the output from "autoware_camera_lidar_calibration_node" for example...
+```
+......
 
+Number of points: 0:1
+[3.98635, 0.897378, 1.5837]
 
+Number of points: 1:1
 
+......
+```
 
+The right number represents clicks on RGB image, and the left number does clicks on point cloud.
+Nine pairs are necessary to calculate extrinsic calibration, and both numbers should be same.
+You need to carefully clink on RGB-image and point clouds.
+After gathering the pairs, extrinsic calibration is executed and the result is saved.
 
-
+The result's form is same to the one of intrinsic calibration.
+However, contents of "CameraExtrinsicMat" are filled by Transformation matrix(4x4) from Lidar to Camera.
+You should check the result is consistent and may fix it.
 
 <img src=doc/extrinsiccalib.png width=50%>
 
