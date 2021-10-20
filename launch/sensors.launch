@@ -39,8 +39,6 @@
     args="-urdf -param /robot_description2 -model rgbcamera"/>
   <node pkg="gazebo_ros" type="spawn_model" name="spawn_board_model"
     args="-sdf -database checkerboard_plane -model checkerboard_plane -x 4 -z 1 -P -1.5707963 "/>
-  <!--<node pkg="gazebo_ros" type="spawn_model" name="spawn_board_model"-->
-    <!--args="-sdf -database calibration_plane -model calibration_plane -x 4 -z 1 -P -1.5707963 "/>-->
 
   <!-- RViz -->
   <arg name="rviz" default="true"/>
