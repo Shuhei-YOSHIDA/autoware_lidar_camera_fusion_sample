@@ -130,7 +130,7 @@ You should check the result is consistent and may fix it.
 To utilize the result of intrinsic and extrinsic calibration, use "calibration_publisher" package.
 
 ```
-$ rosrun calibration_publisher calibration_publisher _calibrarion_file:=EXTRINSIC_FILE_PATH _camera_frame:=rgb_camera_link _target_frame:=velodyne2 image_topic_src:=/rgb_camera/image_raw _camera_info_topic:=/rgb_camera/camera_info
+$ rosrun calibration_publisher calibration_publisher _calibraion_file:=EXTRINSIC_FILE_PATH _camera_frame:=rgb_camera_link _target_frame:=velodyne2 image_topic_src:=/rgb_camera/image_raw _camera_info_topic:=/rgb_camera/camera_info
 ```
 
 You can check connection of TF between camera_frame and target_frame in RViz.
